@@ -51,16 +51,14 @@ end
   array_w_count
 end
 
- def merge_data(keys, data)
-  merge_array = []
-  data[0].each do |key, value|
-    puts "key: #{key}"
-    puts "value: #{value}"
-    value[:first_name] = key
-    merge_array << value
-  end
-  merge_array
+def merge_data(keys, data)
+ keys.each do |name_hash|
+   data.each do |hash|
+     name_hash.merge!(hash[name_hash[:first_name]])
+   end
+ end
 end
+
 
  def find_cool(hashes)
   hashes.select do |hash|
