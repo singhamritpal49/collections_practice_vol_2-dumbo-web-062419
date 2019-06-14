@@ -21,21 +21,15 @@ end
   end
 end
 
- def merge_data(keys, data)
-  merged = Array.new
-  keys.each do |keys_person|
-    keys_person.each do |keys_key, keys_value|
-      data.each do |data_person|
-        data_person.each do |data_name, data_details|
-          if keys_value == data_name
-            data_person[data_name][keys_key] = keys_value
-            merged << data_details
-          end
-        end
-      end
-    end
-  end
-  merged
+def merge_data(keys, data)
+ merge_array = []
+ data[0].each do |key, value|
+   puts "key: #{key}"
+   puts "value: #{value}"
+   value[:first_name] = key
+   merge_array << value
+ end
+ merge_array
 end
 
  def find_cool(cool)
