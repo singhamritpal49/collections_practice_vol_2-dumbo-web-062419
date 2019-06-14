@@ -1,55 +1,81 @@
 def begins_with_r(array)
-  array.all?{|item| item.start_with?("r")}
+  a_size = array.size
+  !(array.any? {|word| !(word.start_with?("r"))})
 end
 
  def contain_a(array)
-  array.select{|item| item.include?("a")}
+  array.select {|element| element.include?("a")}
 end
 
  def first_wa(array)
-  array.find{|item| item.to_s.start_with?("wa")}
+  array.find {|element| (element.class == String) && (element.start_with?("wa")) }
 end
 
  def remove_non_strings(array)
-  array.delete_if{|item| item != item.to_s}
+  array.delete_if {|element| element.class != String}
+end
+
+ def count_elements_old(array)
+  array_w_count = []
+  count = 0
+  while(!array.empty?)
+    for index in 0..(array.size-1)
+      if(array[0] == array[index])
+        count += 1
+      end
+    end
+    array_w_count << array[0]
+    array.delete_if {|element| array_w_count.last == element}
+    array_w_count[-1] = array_w_count.last.merge({:count => count})
+    count = 0;
+  end
+
+   array_w_count
 end
 
  def count_elements(array)
-  array.uniq.collect do |item|
-    item[:count] = array.count(item)
-    item
-  end
-end
-
-def merge_data(keys, data)
- merge_array = []
- data[0].each do |key, value|
-   puts "key: #{key}"
-   puts "value: #{value}"
-   value[:first_name] = key
-   merge_array << value
- end
- merge_array
-end
-
- def find_cool(cool)
-answer = []
-  cool.each do |item|
-    item.each do |key, value|
-      answer << item if value == "cool"
+  array.sort_by{|hash| hash[:name]}
+  array_w_count = []
+  count = 1;
+  prev = array[0]
+  for i in 1..(array.size-1)
+    if(array[i] == prev)
+      count += 1
+    else
+      array_w_count << prev.merge({:count => count})
+      prev = array[i]
+      count = 1
     end
   end
-  answer
+  array_w_count << prev.merge(:count => count)
+  array_w_count
+end
+
+ def merge_data(keys, data)
+  merge_array = []
+  data[0].each do |key, value|
+    puts "key: #{key}"
+    puts "value: #{value}"
+    value[:first_name] = key
+    merge_array << value
+  end
+  merge_array
+end
+
+ def find_cool(hashes)
+  hashes.select do |hash|
+    hash[:temperature] == "cool"
+  end
 end
 
  def organize_schools(schools)
-  answer = Hash.new
-  schools.each do |school, data|
-    data.each do |key, value|
-      if key == :location
-        !answer.keys.include?(value) ? answer[value] = [school] : answer[value] << school
-      end
+  schools_by_location = {}
+  schools.each do |key, value|
+    if(schools_by_location[value[:location]] == nil)
+      schools_by_location[value[:location]] = [key]
+    else
+      schools_by_location[value[:location]] << key
     end
   end
-  answer
+  schools_by_location
 end
